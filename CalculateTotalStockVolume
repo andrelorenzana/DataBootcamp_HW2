@@ -1,0 +1,45 @@
+Sub CalculateTotalStockVolume():
+
+   'Declare variables
+   Dim sheetNum, rowNum, tickerCount As Long
+   Dim currentTicker As String
+
+
+   'Find out how many sheets
+   sheetNum = ActiveWorkbook.Sheets.Count
+
+   'Start Loop for each sheet
+   For iSheet = 1 To sheetNum
+
+       'Count rows
+       rowNum = Worksheets(iSheet).UsedRange.Rows.Count
+
+
+
+       'Setting up headers in each sheet
+       Worksheets(iSheet).Cells(1, 9) = "Ticker"
+       Worksheets(iSheet).Cells(1, 10) = "Total Stock Volume"
+
+
+       'Setting up initial ticker in each sheet
+       currentTicker = Worksheets(iSheet).Cells(2, 1)
+       tickerCount = 1
+       Worksheets(iSheet).Cells(tickerCount + 1, 9) = currentTicker
+       Worksheets(iSheet).Cells(tickerCount + 1, 10) = 0
+
+       'Loop to add total stock volume for each ticker
+       For iRow = 2 To rowNum
+           If Worksheets(iSheet).Cells(iRow, 1) <> currentTicker Then
+                currentTicker = Worksheets(iSheet).Cells(iRow, 1)
+                tickerCount = tickerCount + 1
+                Worksheets(iSheet).Cells(tickerCount + 1, 9) = currentTicker
+                Worksheets(iSheet).Cells(tickerCount + 1, 10) = 0
+            End If
+
+           Worksheets(iSheet).Cells(tickerCount + 1, 10) = Worksheets(iSheet).Cells(tickerCount + 1, 10) + Worksheets(iSheet).Cells(iRow, 7)
+       Next iRow
+
+   'Next Loop for Sheet
+   Next iSheet
+
+End Sub
